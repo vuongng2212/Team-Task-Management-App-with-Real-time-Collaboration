@@ -1,0 +1,59 @@
+# Ignore Gradle files
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Ignore STS (Spring Tool Suite) files
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# Ignore IntelliJ IDEA files
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Ignore NetBeans files
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Ignore VS Code files
+.vscode/
+
+# Ignore Spring Boot and application-specific files
+application.properties
+application.yml
+*.log
+.spring
+target/
+
+# Ignore local Gradle configuration
+gradle.properties
+
+# Ignore database configuration files (nếu có)
+db.properties
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore personal or sensitive files
+*.key
+*.p12
+*.jks

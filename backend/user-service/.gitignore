@@ -37,8 +37,8 @@ out/
 .vscode/
 
 # Ignore Spring Boot and application-specific files
-application.properties
-application.yml
+#application.properties
+#application.yml
 *.log
 .spring
 target/

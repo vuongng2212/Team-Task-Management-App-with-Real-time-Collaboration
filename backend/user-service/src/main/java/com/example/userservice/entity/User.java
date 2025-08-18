@@ -1,6 +1,15 @@
 package com.example.userservice.entity;
 
-import jakarta.persistence.*;
+import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,21 +22,20 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(unique = true)
+    @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
 
-    private String avatar;
+    @Column(name = "avatar_url")
+    private String avatarUrl;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "role")
+    private UserRole role;
 
-    public enum Role {
-        ADMIN, USER
-    }
 
 }

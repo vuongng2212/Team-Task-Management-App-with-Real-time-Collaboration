@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import TaskList from '@/components/TaskList';
 
 export default function TasksPage() {
@@ -9,8 +10,8 @@ export default function TasksPage() {
       id: 1,
       title: 'Create wireframes for homepage',
       project: 'Website Redesign',
-      status: 'done',
-      priority: 'high',
+      status: 'done' as const,
+      priority: 'high' as const,
       assignee: 'Alex Johnson',
       dueDate: '2023-06-10',
     },
@@ -18,8 +19,8 @@ export default function TasksPage() {
       id: 2,
       title: 'Design color palette and typography',
       project: 'Website Redesign',
-      status: 'done',
-      priority: 'medium',
+      status: 'done' as const,
+      priority: 'medium' as const,
       assignee: 'Alex Johnson',
       dueDate: '2023-06-05',
     },
@@ -27,8 +28,8 @@ export default function TasksPage() {
       id: 3,
       title: 'Research competitor websites',
       project: 'Website Redesign',
-      status: 'in-progress',
-      priority: 'low',
+      status: 'in-progress' as const,
+      priority: 'low' as const,
       assignee: 'Jordan Williams',
       dueDate: '2023-06-15',
     },
@@ -36,8 +37,8 @@ export default function TasksPage() {
       id: 4,
       title: 'Implement responsive navigation',
       project: 'Mobile App Development',
-      status: 'todo',
-      priority: 'high',
+      status: 'todo' as const,
+      priority: 'high' as const,
       assignee: 'Sam Smith',
       dueDate: '2023-06-20',
     },
@@ -45,8 +46,8 @@ export default function TasksPage() {
       id: 5,
       title: 'Setup development environment',
       project: 'Mobile App Development',
-      status: 'todo',
-      priority: 'medium',
+      status: 'todo' as const,
+      priority: 'medium' as const,
       assignee: 'Taylor Reed',
       dueDate: '2023-06-18',
     },
@@ -54,8 +55,8 @@ export default function TasksPage() {
       id: 6,
       title: 'Create user personas',
       project: 'Marketing Campaign',
-      status: 'todo',
-      priority: 'low',
+      status: 'todo' as const,
+      priority: 'low' as const,
       assignee: 'Casey Brown',
       dueDate: '2023-06-25',
     },
@@ -63,8 +64,8 @@ export default function TasksPage() {
       id: 7,
       title: 'Write unit tests for authentication',
       project: 'Mobile App Development',
-      status: 'review',
-      priority: 'high',
+      status: 'review' as const,
+      priority: 'high' as const,
       assignee: 'Sam Smith',
       dueDate: '2023-06-22',
     },
@@ -72,8 +73,8 @@ export default function TasksPage() {
       id: 8,
       title: 'Create project documentation',
       project: 'Website Redesign',
-      status: 'done',
-      priority: 'medium',
+      status: 'done' as const,
+      priority: 'medium' as const,
       assignee: 'Jordan Williams',
       dueDate: '2023-06-12',
     },
@@ -88,12 +89,12 @@ export default function TasksPage() {
           </h1>
         </div>
         <div className="mt-4 flex md:mt-0 md:ml-4">
-          <button
-            type="button"
+          <Link
+            href="/tasks/create"
             className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             New Task
-          </button>
+          </Link>
         </div>
       </div>
 

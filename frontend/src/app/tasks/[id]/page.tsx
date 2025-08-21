@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import TaskForm from '@/components/TaskForm';
 
-export default function TaskDetailPage({ params }: { params: { id: string } }) {
+export default function TaskDetailPage({ params }: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+  const router = useRouter();
   const taskId = params.id;
   
   // Mock task data
@@ -30,12 +33,13 @@ export default function TaskDetailPage({ params }: { params: { id: string } }) {
     {
       id: 2,
       author: 'Jordan Williams',
-      content: 'Thanks for the feedback. I'll make those adjustments and share an updated version.',
+      content: 'Thanks for the feedback. I\'ll make those adjustments and share an updated version.',
       createdAt: '2023-06-10T15:45:00Z',
     },
   ]);
 
   const [newComment, setNewComment] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleAddComment = () => {
     if (!newComment.trim()) return;
@@ -79,164 +83,229 @@ export default function TaskDetailPage({ params }: { params: { id: string } }) {
     }
   };
 
+  // Mock data for projects and team members
+  const projects = [
+    { id: '1', name: 'Website Redesign' },
+    { id: '2', name: 'Mobile App Development' },
+    { id: '3', name: 'Marketing Campaign' },
+  ];
+
+  const teamMembers = [
+    { id: '1', name: 'Alex Johnson' },
+    { id: '2', name: 'Sam Smith' },
+    { id: '3', name: 'Jordan Williams' },
+    { id: '4', name: 'Taylor Reed' },
+  ];
+
+  const handleEditSubmit = (data: {
+    title: string;
+    description: string;
+    projectId: string;
+    status: 'todo' | 'in-progress' | 'review' | 'done';
+    priority: 'low' | 'medium' | 'high';
+    assigneeId: string;
+    dueDate: string;
+  }) => {
+    console.log('Updated task data:', data);
+    // Here you would typically send the data to your backend
+    // For now, we'll just update the local state and exit edit mode
+    setTask({
+      ...task,
+      title: data.title,
+      description: data.description,
+      project: projects.find(p => p.id === data.projectId)?.name || task.project,
+      status: data.status,
+      priority: data.priority,
+      assignee: teamMembers.find(m => m.id === data.assigneeId)?.name || task.assignee,
+      dueDate: data.dueDate,
+      updatedAt: new Date().toISOString(),
+    });
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
   return (
-    <div className=\"py-6\">
-      <div className=\"flex flex-col md:flex-row md:items-center md:justify-between\">
-        <div className=\"min-w-0 flex-1\">
-          <h1 className=\"text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate\">
+    <div className="py-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
             Task Details
           </h1>
         </div>
-        <div className=\"mt-4 flex md:mt-0 md:ml-4\">
+        <div className="mt-4 flex md:mt-0 md:ml-4">
           <button
-            type=\"button\"
-            className=\"ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500\"
+            type="button"
+            onClick={() => setIsEditing(!isEditing)}
+            className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            Edit Task
+            {isEditing ? 'Cancel Edit' : 'Edit Task'}
           </button>
         </div>
       </div>
 
-      <div className=\"mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6\">
-        <div className=\"lg:col-span-2\">
-          <div className=\"bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg\">
-            <div className=\"px-4 py-5 sm:px-6\">
-              <h3 className=\"text-lg leading-6 font-medium text-gray-900 dark:text-white\">
-                {task.title}
-              </h3>
-              <p className=\"mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400\">
-                {task.description}
-              </p>
-            </div>
-            <div className=\"border-t border-gray-200 dark:border-gray-700\">
-              <dl>
-                <div className=\"bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6\">
-                  <dt className=\"text-sm font-medium text-gray-500 dark:text-gray-400\">
-                    Project
-                  </dt>
-                  <dd className=\"mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2\">
-                    {task.project}
-                  </dd>
-                </div>
-                <div className=\"bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6\">
-                  <dt className=\"text-sm font-medium text-gray-500 dark:text-gray-400\">
-                    Status
-                  </dt>
-                  <dd className=\"mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2\">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full \${getStatusColor(
-                        task.status
-                      )}`}
-                    >
-                      {task.status.replace('-', ' ')}
-                    </span>
-                  </dd>
-                </div>
-                <div className=\"bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6\">
-                  <dt className=\"text-sm font-medium text-gray-500 dark:text-gray-400\">
-                    Priority
-                  </dt>
-                  <dd className=\"mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2\">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full \${getPriorityColor(
-                        task.priority
-                      )}`}
-                    >
-                      {task.priority}
-                    </span>
-                  </dd>
-                </div>
-                <div className=\"bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6\">
-                  <dt className=\"text-sm font-medium text-gray-500 dark:text-gray-400\">
-                    Assignee
-                  </dt>
-                  <dd className=\"mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2\">
-                    {task.assignee}
-                  </dd>
-                </div>
-                <div className=\"bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6\">
-                  <dt className=\"text-sm font-medium text-gray-500 dark:text-gray-400\">
-                    Due Date
-                  </dt>
-                  <dd className=\"mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2\">
-                    {new Date(task.dueDate).toLocaleDateString()}
-                  </dd>
-                </div>
-                <div className=\"bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6\">
-                  <dt className=\"text-sm font-medium text-gray-500 dark:text-gray-400\">
-                    Created
-                  </dt>
-                  <dd className=\"mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2\">
-                    {new Date(task.createdAt).toLocaleDateString()}
-                  </dd>
-                </div>
-                <div className=\"bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6\">
-                  <dt className=\"text-sm font-medium text-gray-500 dark:text-gray-400\">
-                    Last Updated
-                  </dt>
-                  <dd className=\"mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2\">
-                    {new Date(task.updatedAt).toLocaleDateString()}
-                  </dd>
-                </div>
-              </dl>
+      {isEditing ? (
+        <div className="mt-8">
+          <TaskForm 
+            initialData={{
+              title: task.title,
+              description: task.description,
+              projectId: projects.find(p => p.name === task.project)?.id || '',
+              status: task.status as 'todo' | 'in-progress' | 'review' | 'done',
+              priority: task.priority as 'low' | 'medium' | 'high',
+              assigneeId: teamMembers.find(m => m.name === task.assignee)?.id || '',
+              dueDate: task.dueDate,
+            }}
+            projects={projects}
+            teamMembers={teamMembers}
+            onSubmit={handleEditSubmit}
+            onCancel={handleCancel}
+          />
+        </div>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+              <div className="px-4 py-5 sm:px-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                  {task.title}
+                </h3>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
+                  {task.description}
+                </p>
+              </div>
+              <div className="border-t border-gray-200 dark:border-gray-700">
+                <dl>
+                  <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      Project
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                      {task.project}
+                    </dd>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      Status
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+                          task.status
+                        )}`}
+                      >
+                        {task.status.replace('-', ' ')}
+                      </span>
+                    </dd>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      Priority
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getPriorityColor(
+                          task.priority
+                        )}`}
+                      >
+                        {task.priority}
+                      </span>
+                    </dd>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      Assignee
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                      {task.assignee}
+                    </dd>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      Due Date
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                      {new Date(task.dueDate).toLocaleDateString()}
+                    </dd>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      Created
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                      {new Date(task.createdAt).toLocaleDateString()}
+                    </dd>
+                  </div>
+                  <div className="bg-gray-50 dark:bg-gray-700 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      Last Updated
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                      {new Date(task.updatedAt).toLocaleDateString()}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <div className=\"bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg\">
-            <div className=\"px-4 py-5 sm:px-6\">
-              <h3 className=\"text-lg leading-6 font-medium text-gray-900 dark:text-white\">
-                Activity
-              </h3>
-            </div>
-            <div className=\"border-t border-gray-200 dark:border-gray-700\">
-              <ul className=\"divide-y divide-gray-200 dark:divide-gray-700\">
-                {comments.map((comment) => (
-                  <li key={comment.id} className=\"px-4 py-4 sm:px-6\">
-                    <div className=\"flex items-center\">
-                      <div className=\"flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center\">
-                        <span className=\"text-gray-700 dark:text-gray-300 font-medium\">
-                          {comment.author.charAt(0)}
-                        </span>
-                      </div>
-                      <div className=\"ml-4\">
-                        <div className=\"flex items-center\">
-                          <h4 className=\"text-sm font-medium text-gray-900 dark:text-white\">
-                            {comment.author}
-                          </h4>
-                          <span className=\"ml-2 text-xs text-gray-500 dark:text-gray-400\">
-                            {new Date(comment.createdAt).toLocaleDateString()}
+          <div>
+            <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+              <div className="px-4 py-5 sm:px-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                  Activity
+                </h3>
+              </div>
+              <div className="border-t border-gray-200 dark:border-gray-700">
+                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {comments.map((comment) => (
+                    <li key={comment.id} className="px-4 py-4 sm:px-6">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                          <span className="text-gray-700 dark:text-gray-300 font-medium">
+                            {comment.author.charAt(0)}
                           </span>
                         </div>
-                        <p className=\"mt-1 text-sm text-gray-500 dark:text-gray-400\">
-                          {comment.content}
-                        </p>
+                        <div className="ml-4">
+                          <div className="flex items-center">
+                            <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                              {comment.author}
+                            </h4>
+                            <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                              {new Date(comment.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {comment.content}
+                          </p>
+                        </div>
                       </div>
+                    </li>
+                  ))}
+                </ul>
+                <div className="px-4 py-5 sm:px-6">
+                  <div className="flex">
+                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Y</span>
                     </div>
-                  </li>
-                ))}
-              </ul>
-              <div className=\"px-4 py-5 sm:px-6\">
-                <div className=\"flex\">
-                  <div className=\"flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center\">
-                    <span className=\"text-gray-700 dark:text-gray-300 font-medium\">Y</span>
-                  </div>
-                  <div className=\"ml-4 flex-1\">
-                    <textarea
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      placeholder=\"Add a comment...\"
-                      className=\"block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white\"
-                      rows={3}
-                    />
-                    <div className=\"mt-2 flex justify-end\">
-                      <button
-                        onClick={handleAddComment}
-                        className=\"inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500\"
-                      >
-                        Comment
-                      </button>
+                    <div className="ml-4 flex-1">
+                      <textarea
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="Add a comment..."
+                        className="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+                        rows={3}
+                      />
+                      <div className="mt-2 flex justify-end">
+                        <button
+                          onClick={handleAddComment}
+                          className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                          Comment
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -244,7 +313,7 @@ export default function TaskDetailPage({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

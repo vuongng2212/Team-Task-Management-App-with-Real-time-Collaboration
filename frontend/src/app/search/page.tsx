@@ -1,59 +1,118 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 export default function SearchPage() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get('q') || '';
-  
-  // Mock search results
-  const [results] = useState({
-    tasks: [
-      {
-        id: 1,
-        title: 'Create wireframes for homepage',
-        project: 'Website Redesign',
-        status: 'completed',
-      },
-      {
-        id: 2,
-        title: 'Design color palette and typography',
-        project: 'Website Redesign',
-        status: 'completed',
-      },
-      {
-        id: 3,
-        title: 'Research competitor websites',
-        project: 'Website Redesign',
-        status: 'in-progress',
-      },
-    ],
-    projects: [
-      {
-        id: 1,
-        name: 'Website Redesign',
-        description: 'Complete redesign of company website to improve user experience',
-      },
-      {
-        id: 2,
-        name: 'Mobile App Development',
-        description: 'Development of new mobile application for customer engagement',
-      },
-    ],
-    people: [
-      {
-        id: 1,
-        name: 'Alex Johnson',
-        role: 'Designer',
-      },
-      {
-        id: 2,
-        name: 'Sam Smith',
-        role: 'Developer',
-      },
-    ],
-  });
+  const router = useRouter();
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<{
+    tasks: {
+      id: number;
+      title: string;
+      project: string;
+      status: string;
+    }[];
+    projects: {
+      id: number;
+      name: string;
+      description: string;
+    }[];
+    people: {
+      id: number;
+      name: string;
+      role: string;
+    }[];
+  } | null>(null);
+
+  useEffect(() => {
+    // Get query from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const q = urlParams.get('q');
+    if (q) {
+      setQuery(q);
+      // Mock search results
+      setResults({
+        tasks: [
+          {
+            id: 1,
+            title: 'Create wireframes for homepage',
+            project: 'Website Redesign',
+            status: 'completed',
+          },
+          {
+            id: 2,
+            title: 'Design color palette and typography',
+            project: 'Website Redesign',
+            status: 'completed',
+          },
+          {
+            id: 3,
+            title: 'Research competitor websites',
+            project: 'Website Redesign',
+            status: 'in-progress',
+          },
+        ],
+        projects: [
+          {
+            id: 1,
+            name: 'Website Redesign',
+            description: 'Complete redesign of company website to improve user experience',
+          },
+          {
+            id: 2,
+            name: 'Mobile App Development',
+            description: 'Development of new mobile application for customer engagement',
+          },
+        ],
+        people: [
+          {
+            id: 1,
+            name: 'Alex Johnson',
+            role: 'Designer',
+          },
+          {
+            id: 2,
+            name: 'Sam Smith',
+            role: 'Developer',
+          },
+        ],
+      });
+    }
+  }, []);
+
+  if (!query) {
+    return (
+      <div className="py-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
+              Search
+            </h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Enter a search term to find tasks, projects, and people.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!results) {
+    return (
+      <div className="py-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
+              Searching...
+            </h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-6">

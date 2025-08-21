@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import MemberList from '@/components/MemberList';
 
 export default function TeamPage() {
   const [members] = useState([
@@ -9,60 +10,48 @@ export default function TeamPage() {
       name: 'Alex Johnson',
       email: 'alex.johnson@example.com',
       role: 'Designer',
-      status: 'online',
-      avatar: 'AJ',
+      status: 'online' as const,
     },
     {
       id: 2,
       name: 'Sam Smith',
       email: 'sam.smith@example.com',
       role: 'Developer',
-      status: 'offline',
-      avatar: 'SS',
+      status: 'offline' as const,
     },
     {
       id: 3,
       name: 'Jordan Williams',
       email: 'jordan.williams@example.com',
       role: 'Project Manager',
-      status: 'away',
-      avatar: 'JW',
+      status: 'away' as const,
     },
     {
       id: 4,
       name: 'Taylor Reed',
       email: 'taylor.reed@example.com',
       role: 'Developer',
-      status: 'online',
-      avatar: 'TR',
+      status: 'online' as const,
     },
     {
       id: 5,
       name: 'Morgan Lee',
       email: 'morgan.lee@example.com',
       role: 'Designer',
-      status: 'offline',
-      avatar: 'ML',
+      status: 'offline' as const,
     },
     {
       id: 6,
       name: 'Casey Brown',
       email: 'casey.brown@example.com',
       role: 'Marketing',
-      status: 'online',
-      avatar: 'CB',
+      status: 'online' as const,
     },
   ]);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'online':
-        return 'bg-green-500';
-      case 'away':
-        return 'bg-yellow-500';
-      default:
-        return 'bg-gray-500';
-    }
+  const handleAddMember = () => {
+    console.log('Add member clicked');
+    // Implement add member functionality
   };
 
   return (
@@ -84,43 +73,7 @@ export default function TeamPage() {
       </div>
 
       <div className="mt-8">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {members.map((member) => (
-            <div
-              key={member.id}
-              className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow"
-            >
-              <div className="px-4 py-5 sm:p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0 h-12 w-12 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">
-                      {member.avatar}
-                    </span>
-                  </div>
-                  <div className="ml-4">
-                    <div className="flex items-center">
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                        {member.name}
-                      </h3>
-                      <span className={`ml-2 h-3 w-3 rounded-full ${getStatusColor(member.status)}`}></span>
-                    </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{member.email}</p>
-                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{member.role}</p>
-                  </div>
-                </div>
-                
-                <div className="mt-4 flex space-x-3">
-                  <button className="flex-1 inline-flex items-center justify-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Message
-                  </button>
-                  <button className="flex-1 inline-flex items-center justify-center px-3 py-1 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    View Profile
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <MemberList members={members} onAddMember={handleAddMember} />
       </div>
 
       <div className="mt-12">

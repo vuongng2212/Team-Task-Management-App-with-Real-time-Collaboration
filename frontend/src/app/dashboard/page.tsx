@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import ProjectList from '@/components/ProjectList';
 import ProjectProgressChart from '@/components/ProjectProgressChart';
+import MemberList from '@/components/MemberList';
 
 export default function DashboardPage() {
   const [projects] = useState([
@@ -52,6 +53,50 @@ export default function DashboardPage() {
     { id: 5, title: 'Create user personas', project: 'Marketing Campaign', status: 'todo' },
   ]);
 
+  // Mock team members data for MemberList component
+  const teamMembers = [
+    {
+      id: 1,
+      name: 'Alex Johnson',
+      email: 'alex.johnson@example.com',
+      role: 'Designer',
+      status: 'online' as const,
+    },
+    {
+      id: 2,
+      name: 'Sam Smith',
+      email: 'sam.smith@example.com',
+      role: 'Developer',
+      status: 'offline' as const,
+    },
+    {
+      id: 3,
+      name: 'Jordan Williams',
+      email: 'jordan.williams@example.com',
+      role: 'Project Manager',
+      status: 'away' as const,
+    },
+    {
+      id: 4,
+      name: 'Taylor Reed',
+      email: 'taylor.reed@example.com',
+      role: 'Developer',
+      status: 'online' as const,
+    },
+    {
+      id: 5,
+      name: 'Morgan Lee',
+      email: 'morgan.lee@example.com',
+      role: 'Designer',
+      status: 'offline' as const,
+    },
+  ];
+
+  const handleAddMember = () => {
+    console.log('Add member clicked');
+    // Implement add member functionality
+  };
+
   return (
     <div className="py-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -78,78 +123,9 @@ export default function DashboardPage() {
         <div>
           <ProjectProgressChart projects={chartData} />
           
-          <div className="mt-6 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Recent Activity</h3>
-            <div className="flow-root">
-              <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                <li className="py-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                        <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">AJ</span>
-                      </div>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        Alex Johnson
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                        Completed task: Create wireframes
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        2h ago
-                      </p>
-                    </div>
-                  </div>
-                </li>
-                <li className="py-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                        <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">SS</span>
-                      </div>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        Sam Smith
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                        Commented on task: Design homepage mockup
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        5h ago
-                      </p>
-                    </div>
-                  </div>
-                </li>
-                <li className="py-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                        <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">JW</span>
-                      </div>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        Jordan Williams
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                        Assigned task: Setup development environment
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        1d ago
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
+          <div className="mt-6">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Team Members</h3>
+            <MemberList members={teamMembers} onAddMember={handleAddMember} />
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import TopNavbar from '@/components/TopNavbar';
 
 export default function DashboardLayout({
   children,
@@ -23,28 +24,8 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Mobile sidebar toggle */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between p-4">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-          >
-            <span className="sr-only">Open sidebar</span>
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">TF</span>
-            </div>
-            <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">TaskFlow</span>
-          </div>
-          <div className="w-6"></div> {/* Spacer for symmetry */}
-        </div>
-      </div>
-
+      <TopNavbar />
+      
       {/* Desktop sidebar */}
       <div className="hidden md:block md:w-64 md:fixed md:inset-y-0">
         <div className="flex flex-col flex-grow pt-5 bg-white dark:bg-gray-800 overflow-y-auto border-r border-gray-200 dark:border-gray-700">
@@ -122,7 +103,7 @@ export default function DashboardLayout({
 
       {/* Main content */}
       <div className="md:pl-64 flex flex-col flex-1">
-        <main className="flex-1 pb-8 pt-16 md:pt-0">
+        <main className="flex-1 pb-8">
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               {children}

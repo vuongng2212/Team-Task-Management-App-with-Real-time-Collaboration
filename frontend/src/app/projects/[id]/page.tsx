@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import KanbanBoard from '@/components/KanbanBoard';
+import MemberList from '@/components/MemberList';
 
-export default function ProjectPage({ params }: { params: { id: string } }) {
+export default function ProjectPage({ params }: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
   const projectId = params.id;
   
   // Mock project data
@@ -12,12 +13,13 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     id: projectId,
     name: 'Website Redesign',
     description: 'Complete redesign of company website to improve user experience and conversion rates.',
-    members: [
-      { id: 1, name: 'Alex Johnson', role: 'Designer' },
-      { id: 2, name: 'Sam Smith', role: 'Developer' },
-      { id: 3, name: 'Jordan Williams', role: 'Project Manager' },
-    ],
   };
+
+  const members = [
+    { id: 1, name: 'Alex Johnson', email: 'alex@example.com', role: 'Designer', status: 'online' as const },
+    { id: 2, name: 'Sam Smith', email: 'sam@example.com', role: 'Developer', status: 'offline' as const },
+    { id: 3, name: 'Jordan Williams', email: 'jordan@example.com', role: 'Project Manager', status: 'away' as const },
+  ];
 
   // Mock kanban columns and tasks
   const [columns, setColumns] = useState([
@@ -80,6 +82,11 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     );
   };
 
+  const handleAddMember = () => {
+    console.log('Add member clicked');
+    // Implement add member functionality
+  };
+
   return (
     <div className="py-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -103,25 +110,8 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
       {/* Project Members */}
       <div className="mt-6">
-        <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Team Members</h2>
-        <div className="flex space-x-2">
-          {project.members.map((member) => (
-            <div key={member.id} className="flex items-center">
-              <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                <span className="text-gray-700 dark:text-gray-300 font-medium">
-                  {member.name.charAt(0)}
-                </span>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">{member.name}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{member.role}</p>
-              </div>
-            </div>
-          ))}
-          <button className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600">
-            <span className="text-lg">+</span>
-          </button>
-        </div>
+        <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Team Members</h2>
+        <MemberList members={members} onAddMember={handleAddMember} />
       </div>
 
       {/* Kanban Board */}

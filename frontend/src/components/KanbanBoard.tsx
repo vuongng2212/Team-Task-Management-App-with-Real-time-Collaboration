@@ -68,20 +68,20 @@ export default function KanbanBoard({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
       {columns.map((column) => (
         <div
           key={column.id}
-          className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm p-4"
+          className="bg-gray-50 dark:bg-gray-800/50 rounded-xl shadow-sm p-4 border border-gray-200 dark:border-gray-700"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-gray-900 dark:text-white">
               {column.title}{' '}
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
                 ({column.taskIds.length})
               </span>
             </h3>
-            <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+            <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-full p-1 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
               <svg
                 className="h-5 w-5"
                 fill="none"
@@ -98,29 +98,32 @@ export default function KanbanBoard({
             </button>
           </div>
 
-          <div className="space-y-3 min-h-[100px]">
+          <div className="space-y-3 min-h-[120px]">
             {column.taskIds.map((taskId) => {
               const task = tasks[taskId];
               if (!task) return null;
               return (
                 <div
                   key={task.id}
-                  className="bg-white dark:bg-gray-700 rounded-lg shadow p-3 cursor-move hover:shadow-md transition-shadow"
+                  className="bg-white dark:bg-gray-700 rounded-lg shadow p-4 cursor-move hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-600"
                   draggable
                 >
-                  <p className="text-sm text-gray-900 dark:text-white">
+                  <p className="text-sm text-gray-900 dark:text-white font-medium">
                     {task.content}
                   </p>
                   {task.dueDate && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Due: {new Date(task.dueDate).toLocaleDateString()}
-                    </p>
+                    <div className="mt-2 flex items-center text-xs text-gray-500 dark:text-gray-400">
+                      <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {new Date(task.dueDate).toLocaleDateString()}
+                    </div>
                   )}
-                  <div className="mt-2 flex items-center justify-between">
+                  <div className="mt-3 flex items-center justify-between">
                     {task.assignee ? (
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                          <span className="text-xs text-gray-700 dark:text-gray-300">
+                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center">
+                          <span className="text-xs text-white">
                             {task.assignee.charAt(0)}
                           </span>
                         </div>
@@ -131,7 +134,7 @@ export default function KanbanBoard({
                     ) : (
                       <div></div>
                     )}
-                    <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                       <svg
                         className="h-4 w-4"
                         fill="none"
@@ -163,15 +166,15 @@ export default function KanbanBoard({
                 })
               }
               placeholder="Add a task..."
-              className="w-full px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               rows={2}
             />
             <div className="mt-2 flex justify-end">
               <button
                 onClick={() => handleAddTask(column.id)}
-                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
               >
-                Add
+                Add Task
               </button>
             </div>
           </div>

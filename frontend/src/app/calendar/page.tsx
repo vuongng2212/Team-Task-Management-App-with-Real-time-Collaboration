@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import TopNavbar from '@/components/TopNavbar';
 
 export default function CalendarPage() {
   const [currentDate] = useState(new Date());
@@ -74,134 +75,147 @@ export default function CalendarPage() {
   const calendarDays = generateCalendarDays();
 
   return (
-    <div className="py-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
-            Calendar
-          </h1>
-        </div>
-        <div className="mt-4 flex md:mt-0 md:ml-4">
-          <button
-            type="button"
-            className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Today
-          </button>
-          <button
-            type="button"
-            className="ml-3 inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="ml-3 inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Next
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {selectedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-            </h2>
-          </div>
-          <div className="border-t border-gray-200 dark:border-gray-700">
-            <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700 text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
-              {daysOfWeek.map((day) => (
-                <div key={day} className="bg-white dark:bg-gray-800 py-2">
-                  {day}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <TopNavbar />
+      
+      {/* Main content */}
+      <div className="flex flex-col flex-1">
+        <main className="flex-1 pb-8">
+          <div className="py-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+              <div className="py-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                  <div className="min-w-0 flex-1">
+                    <h1 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
+                      Calendar
+                    </h1>
+                  </div>
+                  <div className="mt-4 flex md:mt-0 md:ml-4">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Today
+                    </button>
+                    <button
+                      type="button"
+                      className="ml-3 inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      type="button"
+                      className="ml-3 inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
-              ))}
-            </div>
-            <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
-              {calendarDays.map((day, index) => (
-                <div
-                  key={index}
-                  className={`min-h-24 bg-white dark:bg-gray-800 p-1 ${
-                    day ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750' : ''
-                  } ${isSelected(day) ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
-                  onClick={() => day && setSelectedDate(day)}
-                >
-                  {day && (
-                    <>
-                      <div className={`text-sm p-1 text-center ${
-                        isToday(day) 
-                          ? 'bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center ml-auto mr-auto' 
-                          : 'text-gray-900 dark:text-white'
-                      }`}>
-                        {day.getDate()}
-                      </div>
-                      <div className="mt-1 space-y-1">
-                        {getEventsForDate(day).map((event) => (
-                          <div
-                            key={event.id}
-                            className="text-xs p-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded truncate"
-                          >
-                            {event.time} {event.title}
+
+                <div className="mt-6">
+                  <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+                    <div className="px-4 py-5 sm:px-6">
+                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                        {selectedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                      </h2>
+                    </div>
+                    <div className="border-t border-gray-200 dark:border-gray-700">
+                      <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700 text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                        {daysOfWeek.map((day) => (
+                          <div key={day} className="bg-white dark:bg-gray-800 py-2">
+                            {day}
                           </div>
                         ))}
                       </div>
-                    </>
-                  )}
+                      <div className="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700">
+                        {calendarDays.map((day, index) => (
+                          <div
+                            key={index}
+                            className={`min-h-24 bg-white dark:bg-gray-800 p-1 ${
+                              day ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750' : ''
+                            } ${isSelected(day) ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
+                            onClick={() => day && setSelectedDate(day)}
+                          >
+                            {day && (
+                              <>
+                                <div className={`text-sm p-1 text-center ${
+                                  isToday(day) 
+                                    ? 'bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center ml-auto mr-auto' 
+                                    : 'text-gray-900 dark:text-white'
+                                }`}>
+                                  {day.getDate()}
+                                </div>
+                                <div className="mt-1 space-y-1">
+                                  {getEventsForDate(day).map((event) => (
+                                    <div
+                                      key={event.id}
+                                      className="text-xs p-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded truncate"
+                                    >
+                                      {event.time} {event.title}
+                                    </div>
+                                  ))}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ))}
+
+                <div className="mt-8">
+                  <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+                    <div className="px-4 py-5 sm:px-6">
+                      <h2 className="text-lg font-medium text-gray-900 dark:text-white">
+                        Events for {formatDate(selectedDate)}
+                      </h2>
+                    </div>
+                    <div className="border-t border-gray-200 dark:border-gray-700">
+                      <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {getEventsForDate(selectedDate).length > 0 ? (
+                          getEventsForDate(selectedDate).map((event) => (
+                            <li key={event.id} className="px-4 py-4 sm:px-6">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                  {event.title}
+                                </p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  {event.time}
+                                </p>
+                              </div>
+                              <div className="mt-2 sm:flex sm:justify-between">
+                                <div className="sm:flex">
+                                  <p className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                    {event.date.toLocaleDateString()}
+                                  </p>
+                                </div>
+                                <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+                                  <button className="text-blue-600 dark:text-blue-400 hover:text-blue-500 mr-4">
+                                    Edit
+                                  </button>
+                                  <button className="text-red-600 dark:text-red-400 hover:text-red-500">
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+                            </li>
+                          ))
+                        ) : (
+                          <li className="px-4 py-4 sm:px-6">
+                            <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                              No events scheduled for this day
+                            </p>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg font-medium text-gray-900 dark:text-white">
-              Events for {formatDate(selectedDate)}
-            </h2>
-          </div>
-          <div className="border-t border-gray-200 dark:border-gray-700">
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-              {getEventsForDate(selectedDate).length > 0 ? (
-                getEventsForDate(selectedDate).map((event) => (
-                  <li key={event.id} className="px-4 py-4 sm:px-6">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {event.title}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {event.time}
-                      </p>
-                    </div>
-                    <div className="mt-2 sm:flex sm:justify-between">
-                      <div className="sm:flex">
-                        <p className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                          {event.date.toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
-                        <button className="text-blue-600 dark:text-blue-400 hover:text-blue-500 mr-4">
-                          Edit
-                        </button>
-                        <button className="text-red-600 dark:text-red-400 hover:text-red-500">
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                ))
-              ) : (
-                <li className="px-4 py-4 sm:px-6">
-                  <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-                    No events scheduled for this day
-                  </p>
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
+        </main>
       </div>
     </div>
   );

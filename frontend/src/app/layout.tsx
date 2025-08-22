@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const interTight = Inter_Tight({
+  variable: "--font-heading",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Team Task Manager",
-  description: "A modern team task management application",
+  title: "TaskFlow - Team Task Management",
+  description: "A modern team task management application with real-time collaboration",
 };
 
 export default function RootLayout({
@@ -23,10 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
-      >
+    <html lang="en" className={`${inter.variable} ${interTight.variable}`}>
+      <body className="antialiased min-h-screen bg-background text-foreground font-sans">
         {children}
       </body>
     </html>

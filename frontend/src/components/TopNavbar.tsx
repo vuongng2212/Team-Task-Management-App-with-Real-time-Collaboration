@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import SearchBar from '@/components/SearchBar';
@@ -9,7 +9,16 @@ import UserSidebar from '@/components/UserSidebar';
 
 export default function TopNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -20,26 +29,32 @@ export default function TopNavbar() {
   ];
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm">
+    <header className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-gray-200 dark:border-gray-800' 
+        : 'bg-white dark:bg-gray-900 border-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex">
+          <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <div className="h-8 w-8 rounded-md bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold">TF</span>
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
+                <span className="text-white font-bold text-lg">TF</span>
               </div>
-              <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">TaskFlow</span>
+              <span className="ml-3 text-xl font-bold text-gray-900 dark:text-white hidden sm:block">
+                TaskFlow
+              </span>
             </div>
-            <nav className="hidden md:ml-6 md:flex md:space-x-8">
+            <nav className="hidden md:ml-10 md:flex md:space-x-1">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   className={`${
                     pathname === item.href
-                      ? 'border-blue-500 text-gray-900 dark:text-white'
-                      : 'border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-700 dark:hover:text-gray-200'
-                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                  } rounded-md px-3 py-2 text-sm font-medium transition-colors`}
                 >
                   {item.name}
                 </Link>
@@ -48,17 +63,16 @@ export default function TopNavbar() {
           </div>
           <div className="flex items-center">
             <SearchBar />
-            <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
+            <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center space-x-3">
               <Notifications />
-              <div className="ml-3 relative">
+              <div className="relative">
                 <UserSidebar />
               </div>
             </div>
             <div className="-mr-2 flex items-center md:hidden">
-              {/* Mobile menu button */}
               <button
                 type="button"
-                className="bg-white dark:bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 <span className="sr-only">Open main menu</span>
@@ -73,7 +87,7 @@ export default function TopNavbar() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden">
+        <div className="md:hidden absolute top-16 inset-x-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-lg">
           <div className="pt-2 pb-3 space-y-1">
             {navigation.map((item) => (
               <Link
@@ -81,32 +95,26 @@ export default function TopNavbar() {
                 href={item.href}
                 className={`${
                   pathname === item.href
-                    ? 'bg-blue-50 dark:bg-gray-700 border-blue-500 text-blue-700 dark:text-blue-300'
-                    : 'border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-800 dark:hover:text-gray-200'
-                } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+                    ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:text-gray-800 dark:hover:text-gray-200'
+                } block pl-3 pr-4 py-2 border-l-4 text-base font-medium transition-colors`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
           </div>
-          <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-800">
             <div className="flex items-center px-4">
               <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">AJ</span>
+                <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center">
+                  <span className="text-white font-medium">AJ</span>
                 </div>
               </div>
               <div className="ml-3">
                 <div className="text-base font-medium text-gray-800 dark:text-white">Alex Johnson</div>
                 <div className="text-sm font-medium text-gray-500 dark:text-gray-400">alex.johnson@example.com</div>
               </div>
-              <button className="ml-auto bg-white dark:bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <span className="sr-only">View notifications</span>
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>

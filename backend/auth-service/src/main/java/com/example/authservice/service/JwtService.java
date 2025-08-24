@@ -3,7 +3,7 @@ package com.example.authservice.service;
 import java.util.UUID;
 
 public interface JwtService {
-    
+
     String generateAccessToken(UUID userId, String email, String name);
     String generateRefreshToken(UUID userId);
     
@@ -16,4 +16,5 @@ public interface JwtService {
     long getRefreshTokenExpiration();
     
     String hashToken(String token);
+
 }

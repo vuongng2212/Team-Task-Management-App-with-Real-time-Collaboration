@@ -1,7 +1,5 @@
 package com.example.userservice.dto.request;
 
-import com.example.userservice.entity.UserRole;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateUserRequest {
-    private String fullName;
-    private String email;
-    private String avatarUrl;
-    private UserRole role;
+    private String name; // 1-255 characters
+    private String bio; // max 1000 characters 
+    private String avatar; // URL for avatar
 }

@@ -1,8 +1,6 @@
 package com.example.authservice.service.impl;
 
 import java.security.MessageDigest;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
@@ -125,10 +123,5 @@ public class JwtServiceImpl implements JwtService {
             .build()
             .parseSignedClaims(token)
             .getPayload();
-    }
-    
-    private boolean isTokenExpired(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.getExpiration().before(new Date());
     }
 }

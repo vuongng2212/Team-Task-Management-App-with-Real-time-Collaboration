@@ -15,29 +15,29 @@ public class UserConverter {
 
     public User toEntity(CreateUserRequest request) {
         User user = new User();
-        user.setFullName(request.getFullName());
+        user.setName(request.getFullName()); // CreateUserRequest vẫn có fullName
         user.setEmail(request.getEmail());
-        user.setAvatarUrl(request.getAvatarUrl());
-        user.setRole(request.getRole());
+        user.setAvatar(request.getAvatarUrl()); // CreateUserRequest vẫn có avatarUrl
         return user;
     }
 
     public User toEntity(UpdateUserRequest request) {
         User user = new User();
-        user.setFullName(request.getFullName());
-        user.setEmail(request.getEmail());
-        user.setAvatarUrl(request.getAvatarUrl());
-        user.setRole(request.getRole());
+        user.setName(request.getName()); 
+        user.setAvatar(request.getAvatar());
+        user.setBio(request.getBio()); 
         return user;
     }
 
     public UserResponse toResponse(User user) {
         UserResponse response = new UserResponse();
         response.setId(user.getId());
-        response.setFullName(user.getFullName());
+        response.setName(user.getName()); 
         response.setEmail(user.getEmail());
-        response.setAvatarUrl(user.getAvatarUrl());
-        response.setRole(user.getRole());
+        response.setAvatar(user.getAvatar());
+        response.setBio(user.getBio()); 
+        response.setCreatedAt(user.getCreatedAt());
+        response.setUpdatedAt(user.getUpdatedAt());
         return response;
     }
 
@@ -48,11 +48,14 @@ public class UserConverter {
     }
 
     public void updateEntity(User existingUser, UpdateUserRequest request) {
-        existingUser.setFullName(request.getFullName());
-        existingUser.setEmail(request.getEmail());
-        existingUser.setAvatarUrl(request.getAvatarUrl());
-        if (request.getRole() != null) {
-            existingUser.setRole(request.getRole());
+        if (request.getName() != null) {
+            existingUser.setName(request.getName()); 
+        }
+        if (request.getAvatar() != null) {
+            existingUser.setAvatar(request.getAvatar()); 
+        }
+        if (request.getBio() != null) {
+            existingUser.setBio(request.getBio()); 
         }
     }
 }

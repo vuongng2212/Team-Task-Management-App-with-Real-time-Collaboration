@@ -17,7 +17,6 @@ import com.example.userservice.dto.request.UpdateUserRequest;
 import com.example.userservice.dto.response.UserListResponse;
 import com.example.userservice.dto.response.UserResponse;
 import com.example.userservice.entity.User;
-import com.example.userservice.entity.UserRole;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
 
@@ -57,6 +56,11 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
+    public UserResponse getCurrentUser(String authHeader) {
+        throw new RuntimeException("getCurrentUser not implemented - requires JWT integration");
+    }
+    
+    @Override
     public UserResponse updateUser(UUID id, UpdateUserRequest request) {
         User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found"));
@@ -71,7 +75,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
-        user.setAvatarUrl(avatarUrl);
+        user.setAvatar(avatarUrl);
         User updatedUser = userRepository.save(user);
         return userConverter.toResponse(updatedUser);
     }
@@ -98,40 +102,11 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public UserListResponse getUsersByRole(UserRole role, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<User> userPage = userRepository.findByRole(role, pageable);
-        List<UserResponse> userResponses = userConverter.toResponseList(userPage.getContent());
-        
-        return new UserListResponse(
-            userResponses,
-            (int) userPage.getTotalElements(),
-            userPage.getNumber(),
-            userPage.getSize()
-        );
-    }
-    
-    @Override
-    public boolean isAdmin(UUID userId) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        return UserRole.ADMIN.equals(user.getRole());
-    }
-    
-    @Override
-    public boolean isUser(UUID userId) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        return UserRole.USER.equals(user.getRole());
-    }
-    
-    @Override
     public UserResponse createUserFromAuth(UUID userId, String email, String fullName) {
         User user = new User();
         user.setId(userId);
         user.setEmail(email);
-        user.setFullName(fullName);
-        user.setRole(UserRole.USER);
+        user.setName(fullName);
         
         User savedUser = userRepository.save(user);
         return userConverter.toResponse(savedUser);
@@ -146,7 +121,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserListResponse searchUsers(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> userPage = userRepository.findByFullNameContainingIgnoreCase(keyword, pageable);
+        Page<User> userPage = userRepository.findByNameContainingIgnoreCase(keyword, pageable);
         List<UserResponse> userResponses = userConverter.toResponseList(userPage.getContent());
         
         return new UserListResponse(
@@ -159,19 +134,13 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public List<UserResponse> getTeamMembers() {
-        List<User> teamMembers = userRepository.findByRole(UserRole.USER);
-        return userConverter.toResponseList(teamMembers);
+        List<User> users = userRepository.findAll();
+        return userConverter.toResponseList(users);
     }
 
     @Override
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return userConverter.toResponseList(users);
-    }
-    
-    @Override
-    public List<UserResponse> getUsersByRole(UserRole role) {
-        List<User> users = userRepository.findByRole(role);
         return userConverter.toResponseList(users);
     }
 } 

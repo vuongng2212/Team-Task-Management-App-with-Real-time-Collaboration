@@ -53,4 +53,12 @@ public class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public String getDisplayName() {
+        return name != null && !name.trim().isEmpty() ? name : email.split("@")[0];
+}
+
+    public boolean hasValidAvatar() {
+        return avatar != null && (avatar.startsWith("http://") || avatar.startsWith("https://"));
+}
 }

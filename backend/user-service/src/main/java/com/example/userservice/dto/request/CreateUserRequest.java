@@ -1,7 +1,5 @@
 package com.example.userservice.dto.request;
 
-import com.example.userservice.entity.UserRole;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateUserRequest {
-    private String fullName;
+    private String name;
     private String email;
-    private String avatarUrl;
-    private UserRole role = UserRole.USER;
+    private String avatar;
+    private String bio;
 }

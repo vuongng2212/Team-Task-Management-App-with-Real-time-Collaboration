@@ -9,23 +9,22 @@ import com.example.userservice.dto.response.UserListResponse;
 import com.example.userservice.dto.response.UserResponse;
 
 public interface UserService {
-    UserResponse createUser(CreateUserRequest request);
+    // API: Core endpoints from user-api.md
+    UserResponse getCurrentUser(String authHeader);
     UserResponse getUserById(UUID id);
-    UserResponse getUserByEmail(String email);
-    UserResponse getCurrentUser(String authHeader); // Get current user from JWT
-    UserResponse updateUser(UUID id, UpdateUserRequest request); 
-    UserResponse updateAvatar(UUID id, String avatarUrl);
-    void deleteUser(UUID id); 
-
-    UserListResponse getAllUsers(int page, int size, String sortBy, String sortDirection); 
-    
-    UserResponse createUserFromAuth(UUID userId, String email, String fullName);
-
-    List<UserResponse> getUsersByIds(List<UUID> ids);
-
+    UserResponse updateUser(UUID id, UpdateUserRequest request);
     UserListResponse searchUsers(String keyword, int page, int size);
 
-    List<UserResponse> getTeamMembers();
+    // INTERNAL: Auth service integration
+    UserResponse createUserFromAuth(UUID userId, String email, String fullName);
 
-    List<UserResponse> getAllUsers(); 
+    //INTERNAL: Other services integration
+    UserResponse createUser(CreateUserRequest request);
+    UserResponse getUserByEmail(String email);
+    UserResponse updateAvatar(UUID id, String avatarUrl);
+    void deleteUser(UUID id);
+    List<UserResponse> getUsersByIds(List<UUID> ids);
+    UserListResponse getAllUsers(int page, int size, String sortBy, String sortDirection);
+    List<UserResponse> getTeamMembers();
+    List<UserResponse> getAllUsers();
 }

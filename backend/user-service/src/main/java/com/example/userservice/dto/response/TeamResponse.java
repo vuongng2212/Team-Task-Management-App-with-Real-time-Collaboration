@@ -1,24 +1,25 @@
 package com.example.userservice.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserResponse {
+public class TeamResponse {
     private UUID id;
     private String name;
-    private String email;
-    private String avatar;
-    private String bio;
+    private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<TeamMemberResponse> members;
+    private Integer membersCount;
+    private String role;
+
 }

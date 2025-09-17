@@ -17,6 +17,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Password reset token for account recovery
+ * 
+ * SECURITY: Short expiration time (1 hour)
+ * CLEANUP: Tokens are removed after use or expiration
+ * PATTERN: Similar to RefreshToken with business methods
+ */
 @Entity
 @Table(name = "password_reset_tokens")
 @Data
@@ -46,7 +53,37 @@ public class PasswordResetToken {
         createdAt = LocalDateTime.now();
     }
     
+    // BUSINESS: Check if token is expired
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(this.expiresAt);
+        return LocalDateTime.now().isAfter(expiresAt);
+    }
+    
+    // BUSINESS: Get remaining validity time in minutes
+    public long getRemainingMinutes() {
+        if (isExpired()) {
+            return 0;
+        }
+        return java.time.Duration.between(LocalDateTime.now(), expiresAt).toMinutes();
+    }
+    
+    // BUSINESS: Check if token expires soon (within 10 minutes)
+    public boolean expiresSoon() {
+        return getRemainingMinutes() <= 10;
+    }
+    
+    // BUSINESS: Get token age in minutes
+    public long getAgeInMinutes() {
+        return java.time.Duration.between(createdAt, LocalDateTime.now()).toMinutes();
+    }
+    
+    // BUSINESS: Get token status for logging
+    public String getTokenStatus() {
+        if (isExpired()) {
+            return "EXPIRED";
+        }
+        if (expiresSoon()) {
+            return "EXPIRES_SOON";
+        }
+        return "VALID";
     }
 } 

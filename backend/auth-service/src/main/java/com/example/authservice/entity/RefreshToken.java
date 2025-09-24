@@ -17,6 +17,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Refresh token storage for session management
+ * 
+ * SECURITY: Tokens are hashed, not stored in plain text
+ * CLEANUP: Expired tokens should be periodically removed
+ * PATTERN: Similar to User entity with business methods
+ */
 @Entity
 @Table(name = "refresh_tokens")
 @Data
@@ -46,7 +53,32 @@ public class RefreshToken {
         createdAt = LocalDateTime.now();
     }
     
+    // BUSINESS: Check if token is expired
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(this.expiresAt);
+        return LocalDateTime.now().isAfter(expiresAt);
+    }
+    
+    // BUSINESS: Get remaining validity time in minutes
+    public long getRemainingMinutes() {
+        if (isExpired()) {
+            return 0;
+        }
+        return java.time.Duration.between(LocalDateTime.now(), expiresAt).toMinutes();
+    }
+    
+    // BUSINESS: Check if token expires soon (within 1 hour)
+    public boolean expiresSoon() {
+        return getRemainingMinutes() <= 60;
+    }
+    
+    // BUSINESS: Get token status for logging
+    public String getTokenStatus() {
+        if (isExpired()) {
+            return "EXPIRED";
+        }
+        if (expiresSoon()) {
+            return "EXPIRES_SOON";
+        }
+        return "VALID";
     }
 } 
